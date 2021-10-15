@@ -1,3 +1,4 @@
+
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -26,11 +27,11 @@ public class JavaDataAppV2 {
             return "";
         }
         ticker = ticker.toUpperCase();
-        return buildURL();
+        return buildURL(ticker);
     }
 
     //Generates the URL using user input
-    public String buildURL() {
+    public String buildURL(String ticker) {
         return "https://rest.coinapi.io/v1/exchangerate/"+ticker+"/USD";
     }
 
@@ -43,19 +44,19 @@ public class JavaDataAppV2 {
     }
 
     //Builds the output string
-    public void printStockString(JSONObject stock) {
+    public String printStockString(JSONObject stock) {
         String[] dateTime = getDateTime(stock);
         String base = stock.getString("asset_id_base");
         String quote = stock.getString("asset_id_quote");
         double rate = stock.getDouble("rate");
 
-        String string = String.format("Date: %s\nTime: %s\nTicker: %s\nQuote: %s",dateTime[0], dateTime[1], base, quote);
-        System.out.println(string);
-        System.out.println("Price: "+rate);
+        return String.format("Date: %s\nTime: %s\nTicker: %s\nQuote: %s\nPrice: %f.3",dateTime[0], dateTime[1], base, quote, rate);
+//        System.out.println(string);
+//        System.out.println("Price: "+rate);
     }
 
     //Handles the URL
-    public void handleURL(String http) throws UnirestException {
+    public String handleURL(String http) throws UnirestException {
         String x_coinapi_key = "E45F127F-46D7-46C3-8C5E-4A96413B319C";
         HttpResponse<JsonNode> response = Unirest.get(http)
                 .header("X-CoinAPI-Key", x_coinapi_key)
@@ -63,10 +64,11 @@ public class JavaDataAppV2 {
         try {
             JsonNode jn = response.getBody();
             JSONObject jso = jn.getObject();
-            printStockString(jso);
+            return printStockString(jso);
         } catch (Exception e) {
-            System.out.println("This ticker doesn't seem to be in our records.");
-            System.out.println("Try another.");
+//            System.out.println("This ticker doesn't seem to be in our records.");
+//            System.out.println("Try another.");
+            return null;
         }
     }
 
