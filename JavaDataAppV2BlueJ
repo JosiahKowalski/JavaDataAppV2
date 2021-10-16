@@ -1,0 +1,63 @@
+import javax.json.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.*;
+
+public class JavaDataApp {     
+    String URL;
+
+    //Generates the URL using user input
+    public String buildURL(String stock, String currency) {
+        String URL = "https://rest.coinapi.io/v1/exchangerate/"+stock+"/"+currency+"?apikey=E45F127F-46D7-46C3-8C5E-4A96413B319C";
+        return URL;
+    }
+
+    //Builds the output string
+    public String printStockString(JsonObject stock) {
+        String time = stock.getString("time");
+        String base = stock.getString("asset_id_base");
+        String quote = stock.getString("asset_id_quote");
+        JsonNumber rate = stock.getJsonNumber("rate");
+
+        return String.format("Time: %s  Ticker: %s  Quote: %s  Price: "+rate ,time, base, quote);
+    }
+
+    //Handles the URL 
+    public JsonObject handleURL(String http) {
+        InputStream is = openURL(http);
+        try {
+            JsonReader jsonReader = Json.createReader(is);
+            JsonStructure js = jsonReader.read();
+            jsonReader.close();
+            closeStream(is);
+            JsonObject jso = null;
+            return jso = (JsonObject) js;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    // copied from Jason Millers Bike project
+    private static InputStream openURL (String http) {
+        URL url;
+        InputStream source = null;
+        try {
+            url = new URL(http);
+            source = url.openStream();
+        } catch (Exception e) {
+            System.err.println("Cannot open URL "+http);
+            System.err.println(e);
+        }
+        return source;
+    }
+
+    // copied
+    private static void closeStream (InputStream is) {
+        try {
+            is.close();
+        } catch (Exception e) {
+            System.err.println("Could not close the input stream.");
+            System.err.println(e);
+        }
+    }
+}
