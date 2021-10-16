@@ -7,7 +7,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class JavaDataAppGUI extends JFrame {
+/**
+ * GUI for the JavaDataApp class. This lets the user type in the ticker and select the currency from a dropdown menu.
+ * Displays the data at the bottom of the form.
+ *
+ * @author Josiah
+ * @author Michael
+ */
+public class JavaDataAppGUIBlueJ extends JFrame {
     private JTextField tickerInput;
     private JButton searchButton;
     private JLabel ticker;
@@ -15,7 +22,7 @@ public class JavaDataAppGUI extends JFrame {
     private JPanel DataApp;
     private JComboBox currencyBox;
 
-    public JavaDataAppGUI() {
+    public JavaDataAppGUIBlueJ() {
         searchButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     try {
@@ -43,7 +50,7 @@ public class JavaDataAppGUI extends JFrame {
         // add your code here
         String ticker = tickerInput.getText();
         String currency = String.valueOf(currencyBox.getSelectedItem());
-        JavaDataApp data = new JavaDataApp();
+        JavaDataAppV2BlueJ data = new JavaDataAppV2BlueJ();
         String URL = data.buildURL(ticker.toUpperCase(), currency.toUpperCase());
         String output = data.printStockString(data.handleURL(URL));
         
@@ -53,7 +60,7 @@ public class JavaDataAppGUI extends JFrame {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("App");
-        frame.setContentPane(new JavaDataAppGUI().DataApp);
+        frame.setContentPane(new JavaDataAppGUIBlueJ().DataApp);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);

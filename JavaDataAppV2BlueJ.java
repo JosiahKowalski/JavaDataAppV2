@@ -3,7 +3,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.*;
 
-public class JavaDataApp {     
+/**
+ * This class uses an API (https://docs.coinapi.io/?java#exchange-rates) to get real time stock prices.
+ *
+ * @author Josiah
+ * @author Michael
+ */
+public class JavaDataAppV2BlueJ {     
     String URL;
 
     //Generates the URL using user input
@@ -11,15 +17,23 @@ public class JavaDataApp {
         String URL = "https://rest.coinapi.io/v1/exchangerate/"+stock+"/"+currency+"?apikey=E45F127F-46D7-46C3-8C5E-4A96413B319C";
         return URL;
     }
+    
+    public String[] getDateTime(JsonObject stock) {
+        String dateTime = stock.getString("time");
+        String dateTimeStr = dateTime.replaceAll("^\"|\"$", "");;
+        String[] dateTimeArr = dateTimeStr.split("T");
+        dateTimeArr[1] = dateTimeArr[1].replace(".0000000Z", "");
+        return dateTimeArr;
+    }
 
     //Builds the output string
     public String printStockString(JsonObject stock) {
-        String time = stock.getString("time");
+        String[] dateTime = getDateTime(stock);
         String base = stock.getString("asset_id_base");
         String quote = stock.getString("asset_id_quote");
         JsonNumber rate = stock.getJsonNumber("rate");
 
-        return String.format("Time: %s  Ticker: %s  Quote: %s  Price: "+rate ,time, base, quote);
+        return String.format("Date: %s  Time: %s  Ticker: %s  Quote: %s  Price: "+ rate, dateTime[0], dateTime[1], base, quote);
     }
 
     //Handles the URL 

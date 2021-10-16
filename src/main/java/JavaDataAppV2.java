@@ -1,4 +1,3 @@
-
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -48,6 +47,7 @@ public class JavaDataAppV2 {
         String base = stock.getString("asset_id_base");
         String quote = stock.getString("asset_id_quote");
         double rate = stock.getDouble("rate");
+        double rated = Double.valueOf()
 
         return String.format("Date: %s  Time: %s  Ticker: %s  Quote: %s  Price: %f", dateTime[0], dateTime[1], base, quote, rate);
 //        System.out.println(string);
